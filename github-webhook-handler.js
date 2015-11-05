@@ -56,22 +56,29 @@ function create (options)
             event = req.headers['x-github-event'],
             id    = req.headers['x-github-delivery'];
 
+        if (!isGitHub) {
+            event = req.headers['x-gitlab-event'];
+        }
+
         console.log('==========================================');
         console.log(req.headers);
         console.log('=====================');
         console.log(sig);
         console.log(event);
         console.log(id);
-        if (!sig) {
-            return hasError('No X-Hub-Signature found on request');
-        }
 
         if (!event) {
             return hasError('No X-Github-Event found on request');
         }
 
-        if (!id) {
-            return hasError('No X-Github-Delivery found on request');
+        if (!isGitHub) {
+            if (!sig) {
+                return hasError('No X-Hub-Signature found on request');
+            }
+
+            if (!id) {
+                return hasError('No X-Github-Delivery found on request');
+            }
         }
 
         req.pipe(bl(function (err, data) {
