@@ -60,18 +60,11 @@ function create (options)
             event = req.headers['x-gitlab-event'];
         }
 
-        console.log('==========================================');
-        console.log(req.headers);
-        console.log('=====================');
-        console.log(sig);
-        console.log(event);
-        console.log(id);
-
         if (!event) {
             return hasError('No X-Github-Event found on request');
         }
 
-        if (!isGitHub) {
+        if (isGitHub) {
             if (!sig) {
                 return hasError('No X-Hub-Signature found on request');
             }
