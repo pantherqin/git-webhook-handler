@@ -81,8 +81,10 @@ function create (options)
 
             var obj;
 
-            if (sig !== signBlob(options.secret, data)) {
-                return hasError('X-Hub-Signature does not match blob signature');
+            if (isGitHub) {
+                if (sig !== signBlob(options.secret, data)) {
+                    return hasError('X-Hub-Signature does not match blob signature');
+                }
             }
 
             try {
